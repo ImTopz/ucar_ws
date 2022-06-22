@@ -1,59 +1,90 @@
+#!/usr/bin/env python2
 import cv2
 import numpy as np
 import rospy
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
 from std_msgs.msg import String
 from std_msgs.msg import Int8
 import os
-from cap import detect
 
 color_dist = {
-              'red': {'Lower': np.array([178, 165, 175]), 'Upper': np.array([180, 180, 180])},
-               #ok blue
-              'blue': {'Lower': np.array([108, 140, 120]), 'Upper': np.array([114, 160, 140])},
-              #green ok
-              'green': {'Lower': np.array([70, 190, 120]), 'Upper': np.array([75, 200, 130])},
-              #gray ok
-              'gray': {'Lower': np.array([19, 10, 140]), 'Upper': np.array([34, 14, 150])},
-              }
+    'red': {'Lower': np.array([178, 165, 175]), 'Upper': np.array([180, 180, 180])},
+    # ok blue
+    'blue': {'Lower': np.array([108, 140, 120]), 'Upper': np.array([114, 160, 140])},
+    # green ok
+    'green': {'Lower': np.array([70, 190, 120]), 'Upper': np.array([75, 200, 130])},
+    # gray ok
+    'gray': {'Lower': np.array([19, 10, 140]), 'Upper': np.array([34, 14, 150])},
+}
+
+
+def detect(cap):
+    frame = bridge.imgmsg_to_cv2(cap, "bgr8")
+    gs_frame = cv2.GaussianBlur(frame, (5, 5), 0)
+    hsv = cv2.cvtColor(gs_frame, cv2.COLOR_BGR2HSV)
+    inRange_hsv_blue = cv2.inRange(hsv, color_dist['blue']['Lower'], color_dist['blue']['Upper'])
+    inRange_hsv_green = cv2.inRange(hsv, color_dist['green']['Lower'], color_dist['green']['Upper'])
+    inRange_hsv_red = cv2.inRange(hsv, color_dist['red']['Lower'], color_dist['red']['Upper'])
+    inRange_hsv_gray = cv2.inRange(hsv, color_dist['gray']['Lower'], color_dist['gray']['Upper'])
+    xy1 = np.column_stack(np.where(inRange_hsv_blue == 255))
+    xy2 = np.column_stack(np.where(inRange_hsv_red == 255))
+    xy3 = np.column_stack(np.where(inRange_hsv_green == 255))
+    xy4 = np.column_stack(np.where(inRange_hsv_gray == 255))
+    if (len(xy1) > 100):
+        return 1
+    if (len(xy2) > 100):
+        return 2
+    if (len(xy3) > 100):
+        return 3
+    if (len(xy4) > 100 and len(xy1) == 0 and len(xy2) == 0 and len(xy3) == 0): #gray
+        return 4
+
+
 class Car:
     def __init__(self):
-        self.image_pub = rospy.Publisher('/image_view/image_raw', Image, queue_size=1)
-        self.image_sub=rospy.Subscriber('/camera/rgb/image_raw', Image, self.image_callback)
-        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Arm, queue_size=1)
-    def sendtopic(self,mission):
-        Arm = Arm()
-        Arm.
-        self.cmd_vel_pub.publish(twist)
+        self.image_sub = rospy.Subscriber('/image_view/output', Image, self.image_callback)
+        # self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Arm, queue_size=1)
 
-    def image_callback(self,cap):
+    # def sendtopic(self,mission):
+    # self.cmd_vel_pub.publish(twist)
+
+    def image_callback(self, cap):
+        print("starting 2")
         if (detect(cap) == 1):
-            self.sendtopic(1)
+            os.system("play ~/ucar-master/src/mp3/shuiguo.mp3")
+            #mp3_play
+            arm_sub=rospy.Publisher('Arm', String, queue_size=1)
+            car.image_sub.unregister()
+
         if (detect(cap) == 2):
-            self.sendtopic(2)
+            print("blue")
+            os.system("play ~/ucar-master/src/mp3/shuiguo.mp3")
+            arm_sub = rospy.Publisher('Arm', String, queue_size=1)
+            #mp3_play1
+            car.image_sub.unregister()
         if (detect(cap) == 3):
-            self.sendtopic(3)
+            print("blue")
+            os.system("play ~/ucar-master/src/mp3/shucai.mp3")
+            arm_sub = rospy.Publisher('Arm', String, queue_size=1)
+            # mp3_play1
+            car.image_sub.unregister()
         if (detect(cap) == 4):
-            self.sendtopic(4)
+            print("blue")
+            os.system("play ~/ucar-master/src/mp3/roulei.mp3")
+            arm_sub = rospy.Publisher('Arm', String, queue_size=1)
+            # mp3_play1
+            car.image_sub.unregister()
 
 
-
-if __name__==__"main__":
+if __name__ == "__main__":
     print('starting')
-    cap = cv2.VideoCapture(0)  # 定义摄像头
-    rospy.init_node('detect', anonymous=True)
-    scanner=Car()
-    header = Header(stamp=rospy.Time.now())
-    header.frame_id = "Camera"
-    ros_frame = Image()
-    ros_frame.header = header
-    ros_frame.width = 640
-    ros_frame.height = 480
-    ros_frame.encoding = "bgr8"
-
+    flag =0
+    rospy.init_node('detect')
+    car = Car()
+    bridge = CvBridge()
     # ros_frame.step = 1920
     try:
         rospy.spin()
     except rospy.ROSInterruptException:
         print('exception')
-
-
