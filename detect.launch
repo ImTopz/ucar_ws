@@ -1,0 +1,4 @@
+<launch>
+  <node name="detect" pkg="detect_main" type="detect.sh" output="screen" ></node>
+  <include file="$(find finnal)/launch/finnal.launch"></include>
+</launch>
