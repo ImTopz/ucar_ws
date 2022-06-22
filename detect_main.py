@@ -17,7 +17,8 @@ color_dist = {
               }
 class Car:
     def __init__(self):
-        self.scanSubscriber=rospy.Subscriber('/camera/rgb/image_raw', Image, self.image_callback)
+        self.image_pub = rospy.Publisher('/image_view/image_raw', Image, queue_size=1)
+        self.image_sub=rospy.Subscriber('/camera/rgb/image_raw', Image, self.image_callback)
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Arm, queue_size=1)
     def sendtopic(self,mission):
         Arm = Arm()
@@ -38,8 +39,18 @@ class Car:
 
 if __name__==__"main__":
     print('starting')
+    cap = cv2.VideoCapture(0)  # 定义摄像头
     rospy.init_node('detect', anonymous=True)
     scanner=Car()
+    header = Header(stamp=rospy.Time.now())
+    header.frame_id = "Camera"
+    ros_frame = Image()
+    ros_frame.header = header
+    ros_frame.width = 640
+    ros_frame.height = 480
+    ros_frame.encoding = "bgr8"
+
+    # ros_frame.step = 1920
     try:
         rospy.spin()
     except rospy.ROSInterruptException:
