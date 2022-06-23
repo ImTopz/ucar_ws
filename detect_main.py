@@ -9,13 +9,13 @@ from std_msgs.msg import Int8
 import os
 
 color_dist = {
-    'red': {'Lower': np.array([178, 165, 175]), 'Upper': np.array([180, 180, 180])},
+    'red': {'Lower': np.array([178, 161, 200]), 'Upper': np.array([181, 179, 217])},
     # ok blue
-    'blue': {'Lower': np.array([108, 140, 120]), 'Upper': np.array([114, 160, 140])},
+    'blue': {'Lower': np.array([106, 183, 121]), 'Upper': np.array([114, 210, 142])},
     # green ok
-    'green': {'Lower': np.array([70, 190, 120]), 'Upper': np.array([75, 200, 130])},
+    'green': {'Lower': np.array([79, 180, 120]), 'Upper': np.array([90, 220, 140])},
     # gray ok
-    'gray': {'Lower': np.array([19, 10, 140]), 'Upper': np.array([34, 14, 150])},
+    'gray': {'Lower': np.array([120, 10, 130]), 'Upper': np.array([140, 30, 140])},
 }
 
 
@@ -54,25 +54,25 @@ class Car:
         if (detect(cap) == 1):
             os.system("play ~/ucar-master/src/mp3/shuiguo.mp3")
             #mp3_play
-            arm_sub=rospy.Publisher('Arm', String, queue_size=1)
+            arm_pub.publish(1)
             car.image_sub.unregister()
 
         if (detect(cap) == 2):
             print("blue")
             os.system("play ~/ucar-master/src/mp3/shuiguo.mp3")
-            arm_sub = rospy.Publisher('Arm', String, queue_size=1)
+            arm_pub.publish(2)
             #mp3_play1
             car.image_sub.unregister()
         if (detect(cap) == 3):
             print("blue")
             os.system("play ~/ucar-master/src/mp3/shucai.mp3")
-            arm_sub = rospy.Publisher('Arm', String, queue_size=1)
+            arm_pub.publish(3)
             # mp3_play1
             car.image_sub.unregister()
         if (detect(cap) == 4):
             print("blue")
             os.system("play ~/ucar-master/src/mp3/roulei.mp3")
-            arm_sub = rospy.Publisher('Arm', String, queue_size=1)
+            arm_pub.publish(4)
             # mp3_play1
             car.image_sub.unregister()
 
@@ -81,6 +81,8 @@ if __name__ == "__main__":
     print('starting')
     flag =0
     rospy.init_node('detect')
+    rospy.init_node('arm')
+    arm_pub=rospy.Publisher('/Arm_mode', int, queue_size=10)
     car = Car()
     bridge = CvBridge()
     # ros_frame.step = 1920
