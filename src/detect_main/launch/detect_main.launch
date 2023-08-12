@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="detect_main" name="detect_main" type="detect_main.py" output="screen">></node>
+
+</launch>

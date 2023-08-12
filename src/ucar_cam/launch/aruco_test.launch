@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="ucar_cam" name="qruco_test" type="qruco_test.py" output="screen">></node>
+
+</launch>

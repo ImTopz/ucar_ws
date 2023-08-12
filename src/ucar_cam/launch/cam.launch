@@ -1,0 +1,33 @@
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+<!--节点的名字叫做usb_cam，然后运行一个叫usb_cam_node的可执行文件，这个文件在ros的lib里面，找不到源码文件，只有这个包装好可执行文件-->
+ 
+    <param name="video_device" value="/dev/video0" />
+<!--摄像头的编号，类型：string-->
+ 
+    <param name="image_width" value="640" />
+<!--图像的横向分辨率，类型int-->
+ 
+    <param name="image_height" value="480" />
+<!--图像的纵向分辨率，类型int-->
+ 
+    <param name="pixel_format" value="yuyv" />
+<!--像素编码，可选值：mjepg、yuyv、uyvy，类型：string-->    
+ 
+    <param name="camera_frame_id" value="usb_cam" />
+<!--摄像头坐标系，类型：string-->
+ 
+    <param name="io_method" value="mmap"/>
+<!--IO通道，可选值：mmap、read、userptr，类型：string-->
+ 
+  </node>
+  <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <!-- <remap from="image" to="/usb_cam/image_raw"/> -->
+<!--话题的名字映射为/usb_cam/image_raw-->
+ 
+    <param name="autosize" value="true" />
+  </node>
+
+
+
+</launch>

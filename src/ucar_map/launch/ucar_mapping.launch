@@ -1,0 +1,9 @@
+<launch>
+  <!-- base driver -->
+  <include file="$(find ucar_controller)/launch/base_driver.launch">
+  </include>
+  <!-- lidar driver -->
+  <include file="$(find ydlidar)/launch/ydlidar.launch"/>
+  <!-- gmapping launch -->
+  <include file="$(find ucar_map)/launch/gmapping.launch"/>
+</launch>

@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ucar_cam" name="transport_image_info" type="transport.py" output="screen"/>
+</launch>

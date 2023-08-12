@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="test_1" name="init_car_pos" type="init_car_pos.py" output="screen">></node>
+
+</launch>

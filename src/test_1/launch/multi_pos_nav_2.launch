@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="test_1" name="multi_pos_nav_2" type="multi_pos_nav_2.py" output="screen"/>
+
+</launch>

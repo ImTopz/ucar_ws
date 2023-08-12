@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="test_1" name="get_pos" type="get_pos.py" output="screen"/>
+
+</launch>

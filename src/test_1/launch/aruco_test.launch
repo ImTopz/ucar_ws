@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="test_1" name="qruco_test" type="src/qruco_test.py" output="screen">></node>
+
+</launch>

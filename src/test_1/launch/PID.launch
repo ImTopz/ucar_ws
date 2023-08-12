@@ -1,0 +1,4 @@
+<launch>
+     <!-- <node pkg="test_1" name="PID" type="scripts/pid/py" output="screen" /> -->
+    <node pkg="test_1" name="my_pid" type="PID.py" output="screen" />
+</launch>

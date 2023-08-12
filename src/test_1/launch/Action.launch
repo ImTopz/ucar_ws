@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="test_1" name="Action_nav" type="Action_nav.py" output="screen" />
+</launch>
